@@ -44,22 +44,19 @@ class stocks:
             print("| IBOVESPA | P/L = ", indexes['P/L'], ' | P/VP = ', indexes['P/VP'], ' |')
         return indexes['P/L'] * indexes['P/VP']
 
-    def intrinsic_value_ibovespa(self, LPA, VPA):
-        IBOV = self.ibovespa_statusinvest()
-        price = math.sqrt(IBOV * LPA * VPA)
-        return round(price, 2)
-
-    def intrinsic_value(self, LPA, VPA):
+    def intrinsic_value(self, LPA, VPA, BG = 22.5):
         # PL == PE = 15.0
         # PVP == price to book value = 1.5
         # VPA == book value
         # LPA == EPS
-        price = math.sqrt(22.5 * LPA * VPA)
+        # BG = PL * PVP
+        price = math.sqrt(BG * LPA * VPA)
         return round(price, 2)
 
     def make_dataframe(self):
         LPA = None
         VPA = None
+        IBOV = self.ibovespa_statusinvest(show=True)
         for asset in self.assets:
             self.data['Ações'].append(asset)
             resp = request_from_fundamentus(asset)
@@ -71,12 +68,11 @@ class stocks:
                 LPA = index_value if index == 'LPA' else LPA
                 VPA = index_value if index == 'VPA' else VPA
             self.data['Preço Justo (Graham)'].append(self.intrinsic_value(LPA, VPA))
-            self.data['Preço Justo (IBOVESPA)'].append(self.intrinsic_value_ibovespa(LPA, VPA))
+            self.data['Preço Justo (IBOVESPA)'].append(self.intrinsic_value(LPA, VPA, BG = IBOV))
         self.df = pd.DataFrame(data=self.data)
 
 
     def info(self):
-        self.ibovespa_statusinvest(show=True)
         self.make_dataframe()
         print('----------------------------------------------------------------------------')
         print(self.df)
