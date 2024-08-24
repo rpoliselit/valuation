@@ -17,10 +17,12 @@ def request_from_fundamentus(asset = None):
     url = 'https://www.fundamentus.com.br/detalhes.php?papel=' + asset
     return request_data(url)
 
-def extract_index(index, soup, tag1 = 'td', tag2 = 'td'):
+def extract_index(index, soup, tag1 = 'td', tag2 = 'td', text = False):
     html_tag = soup.select_one(f'{tag1}:-soup-contains("{index}")')
     if html_tag:
         num_text = html_tag.find_next(tag2).text
+        if text:
+            return num_text
         if '-' in num_text:
             return None
         num_float = float(num_text.replace(',', '.').strip('%'))
@@ -116,11 +118,18 @@ class stocks:
 class fiis:
 
     def __init__(self, assets = None):
-        #ASSETS LIST
+        # ASSETS LIST
         self.assets = assets
         self.indexes = {'Cotação', 'Div. Yield', 'P/VP', 'VP/Cota', 'Qtd imóveis', 'Vacância Média'}
-        self.data = {'FIIs': []}
+        self.data = {'FIIs': [], 'Liq. Méd. Diária': []}
         self.df = None
+
+    def liquidity_statusinvest(self, asset = None):
+        # daily liquidity
+        url = 'https://statusinvest.com.br/fundos-imobiliarios/' + asset
+        soup = request_data(url)
+        data = extract_index('Liquidez média diária', soup, tag1 = 'span', tag2 = 'strong', text = True)
+        return data
 
     def make_dataframe(self):
         for asset in self.assets:
@@ -131,6 +140,7 @@ class fiis:
                     self.data[index].append(extract_index(index,resp))
                 else:
                     self.data[index] = [extract_index(index,resp)]
+            self.data['Liq. Méd. Diária'].append(self.liquidity_statusinvest(asset))
         self.df = pd.DataFrame(data=self.data)
     
     def info(self):
