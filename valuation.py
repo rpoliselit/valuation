@@ -111,6 +111,7 @@ class stocks:
 
     def info(self):
         self.make_dataframe()
+        self.df.to_excel('Stocks.xlsx', index = False)
         print('----------------------------------------------------------------------------')
         print(self.df)
         print('----------------------------------------------------------------------------')
@@ -145,6 +146,7 @@ class fiis:
     
     def info(self):
         self.make_dataframe()
+        self.df.to_excel('FIIs.xlsx', index = False)
         print('----------------------------------------------------------------------------')
         print(self.df)
         print('----------------------------------------------------------------------------')
