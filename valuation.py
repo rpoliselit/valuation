@@ -51,7 +51,7 @@ class stocks:
         if show:
             self.ibov_pl = indexes['P/L']
             self.ibov_pvp = indexes['P/VP']
-            print("|  IBOVESPA  | P/L = ", indexes['P/L'], ' | P/VP = ', indexes['P/VP'], ' |')
+            print(f"|  IBOVESPA  | P/L =  {indexes['P/L']:5.2f}  | P/VP =  {indexes['P/VP']:4.2f}  |")
         return indexes['P/L'] * indexes['P/VP']
 
     def ibrx_statusinvest(self, show = False):
@@ -63,7 +63,7 @@ class stocks:
         if show:
             self.ibrx_pl = indexes['P/L']
             self.ibrx_pvp = indexes['P/VP']
-            print("| BRASIL 100 | P/L = ", indexes['P/L'], ' | P/VP = ', indexes['P/VP'], ' |')
+            print(f"| BRASIL 100 | P/L =  {indexes['P/L']:5.2f}  | P/VP =  {indexes['P/VP']:4.2f}  |")
         return indexes['P/L'] * indexes['P/VP']
 
     def idiv_statusinvest(self, show = False):
@@ -75,7 +75,7 @@ class stocks:
         if show:
             self.idiv_pl = indexes['P/L']
             self.idiv_pvp = indexes['P/VP']
-            print("| DIVIDENDOS | P/L = ", indexes['P/L'], ' | P/VP = ', indexes['P/VP'], ' |')
+            print(f"| DIVIDENDOS | P/L =  {indexes['P/L']:5.2f}  | P/VP =  {indexes['P/VP']:4.2f}  |")
         return indexes['P/L'] * indexes['P/VP']
 
     def intrinsic_value(self, LPA, VPA, BG = 22.5):
