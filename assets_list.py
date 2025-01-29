@@ -12,4 +12,5 @@ stocks_list = ['B3SA3',
 fiis_list = ['KNRI11',
         'VGHF11',
         'HSML11',
-        'HGLG11']
+        'HGLG11',
+        'IRDM11']

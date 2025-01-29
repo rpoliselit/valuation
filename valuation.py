@@ -1,3 +1,4 @@
+import datetime
 import pandas as pd
 import math
 import requests
@@ -6,6 +7,10 @@ from bs4 import BeautifulSoup
 soup = None
 pd.set_option('display.max_rows', None)
 pd.set_option('display.max_columns', None)
+
+def create_timestamp():
+    now = datetime.datetime.now()
+    return now.strftime("%Y-%m-%d")
 
 def request_data(url):
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'}
@@ -41,6 +46,7 @@ class stocks:
         self.ibrx_pvp = None
         self.idiv_pl = None
         self.idiv_pvp = None
+        self.timestamp = create_timestamp()
 
     def ibovespa_statusinvest(self, show = False):
         url = 'https://statusinvest.com.br/indices/ibovespa'
@@ -111,7 +117,7 @@ class stocks:
 
     def info(self):
         self.make_dataframe()
-        self.df.to_excel('Stocks.xlsx', index = False)
+        self.df.to_excel(f'spreedsheets/Stocks_{self.timestamp}.xlsx', index = False)
         print('----------------------------------------------------------------------------')
         print(self.df)
         print('----------------------------------------------------------------------------')
@@ -124,6 +130,7 @@ class fiis:
         self.indexes = {'Cotação', 'Div. Yield', 'P/VP', 'VP/Cota', 'Qtd imóveis', 'Vacância Média'}
         self.data = {'FIIs': [], 'Liq. Méd. Diária': []}
         self.df = None
+        self.timestamp = create_timestamp()
 
     def liquidity_statusinvest(self, asset = None):
         # daily liquidity
@@ -146,7 +153,7 @@ class fiis:
     
     def info(self):
         self.make_dataframe()
-        self.df.to_excel('FIIs.xlsx', index = False)
+        self.df.to_excel(f'spreedsheets/FIIs_{self.timestamp}.xlsx', index = False)
         print('----------------------------------------------------------------------------')
         print(self.df)
         print('----------------------------------------------------------------------------')
